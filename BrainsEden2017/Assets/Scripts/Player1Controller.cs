@@ -73,7 +73,6 @@ public class Player1Controller : MonoBehaviour
 
     void Update()
     {
-        //AimVec = Aimer.transform.position;
         float moveX = Input.GetAxis("AimX");
         float moveY = Input.GetAxis("AimY");
         Vector2 direction = new Vector2(moveX, moveY);
@@ -116,10 +115,10 @@ public class Player1Controller : MonoBehaviour
                 DestroyObject(bullet, 2.0f);
             }
 
-            if (pickUp.transform.position.x < target.x)
-            {
-                Destroy(pickUp.GetComponent<Rigidbody2D>());
-            }
+            //if (pickUp.transform.position.x < target.x)
+            //{
+            //    Destroy(pickUp.GetComponent<Rigidbody2D>());
+            //}
         }
 
         
