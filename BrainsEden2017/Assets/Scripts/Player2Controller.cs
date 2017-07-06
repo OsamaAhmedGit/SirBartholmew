@@ -108,21 +108,21 @@ public class Player2Controller : MonoBehaviour
 //            }
 //        }
 
-		if (Input.GetMouseButtonDown(0))
-		{
-			target = AimVec;
-			target.z = 0;
-			directionVector = (target - transform.position).normalized;
-			GameObject bullet = (GameObject)Instantiate(bulletColor[bulletC], transform.position, Quaternion.identity);
-			bullet.GetComponent<Rigidbody2D>().AddForce(direction * 5, ForceMode2D.Impulse);
+		//if (Input.GetMouseButtonDown(0))
+		//{
+		//	target = AimVec;
+		//	target.z = 0;
+		//	directionVector = (target - transform.position).normalized;
+		//	GameObject bullet = (GameObject)Instantiate(bulletColor[bulletC], transform.position, Quaternion.identity);
+		//	bullet.GetComponent<Rigidbody2D>().AddForce(direction * 5, ForceMode2D.Impulse);
 
-			DestroyObject(bullet, 2.0f);
-		}
+		//	DestroyObject(bullet, 2.0f);
+		//}
 
-		if (pickUp.transform.position.x < target.x)
-		{
-			Destroy(pickUp.GetComponent<Rigidbody2D>());
-		}
+		//if (pickUp.transform.position.x < target.x)
+		//{
+		//	Destroy(pickUp.GetComponent<Rigidbody2D>());
+		//}
 
 
 
