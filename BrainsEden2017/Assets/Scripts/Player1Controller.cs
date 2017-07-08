@@ -15,6 +15,8 @@ public class Player1Controller : MonoBehaviour
 
     public GameObject[] pickUpColor;
 
+    public GameObject[] currentGunArray;
+
     public float bulletVelocity;
 
     private Vector3 target;
@@ -33,6 +35,8 @@ public class Player1Controller : MonoBehaviour
 
     float nextFire;
 
+    private GameObject currentGun;
+
     // Use this for initialization
     void Start()
     {
@@ -41,6 +45,9 @@ public class Player1Controller : MonoBehaviour
         animator = GetComponent<Animator>();
 
 		bulletC = 0;
+
+        currentGun = Instantiate(currentGunArray[0], transform.position, Quaternion.identity);
+        currentGun.transform.parent = transform;
     }
 
     // Update is called once per frame
@@ -99,30 +106,59 @@ public class Player1Controller : MonoBehaviour
 
         //float Shoot = Input.GetAxis("Shoot");
 
-        float fireRate = 0.1f;
+        //float fireRate = 0.1f;
 
-        if (moveX > 0 || moveY > 0 || moveX < 0 || moveY < 0)
+        //if (moveX > 0 || moveY > 0 || moveX < 0 || moveY < 0)
+        //{
+        //    if (Time.time > nextFire)
+        //    {
+        //        nextFire = Time.time + fireRate;
+        //        //target = AimVec;
+        //        //target.z = 0;
+        //        //directionVector = (target - transform.position).normalized;
+        //        GameObject bullet = (GameObject)Instantiate(bulletColor[bulletC], transform.position, Quaternion.identity);
+        //        bullet.GetComponent<Rigidbody2D>().AddForce(direction * 5, ForceMode2D.Impulse);
+
+        //        DestroyObject(bullet, 2.0f);
+        //    }
+
+        //    //if (pickUp.transform.position.x < target.x)
+        //    //{
+        //    //    Destroy(pickUp.GetComponent<Rigidbody2D>());
+        //    //}
+        //}
+
+        if(Input.GetMouseButtonDown(0))
         {
-            if (Time.time > nextFire)
-            {
-                nextFire = Time.time + fireRate;
-                //target = AimVec;
-                //target.z = 0;
-                //directionVector = (target - transform.position).normalized;
-                GameObject bullet = (GameObject)Instantiate(bulletColor[bulletC], transform.position, Quaternion.identity);
-                bullet.GetComponent<Rigidbody2D>().AddForce(direction * 5, ForceMode2D.Impulse);
-
-                DestroyObject(bullet, 2.0f);
-            }
-
-            //if (pickUp.transform.position.x < target.x)
-            //{
-            //    Destroy(pickUp.GetComponent<Rigidbody2D>());
-            //}
+            target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            target.z = 0;
+            directionVector = (target - currentGun.transform.position).normalized;
+            GameObject bullet = (GameObject)Instantiate(bulletColor[bulletC], currentGun.transform.position, Quaternion.identity);
+            bullet.GetComponent<Rigidbody2D>().velocity = directionVector * bulletVelocity;
         }
 
-        
+        Vector3 mousePos = Input.mousePosition;
+        Vector3 objectPosition = Camera.main.WorldToScreenPoint(currentGun.transform.position);
 
+        mousePos.x = mousePos.x - objectPosition.x;
+        mousePos.y = mousePos.y - objectPosition.y;
+
+        //float angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+
+        float rx = Input.GetAxis("Right_Horizontal");
+        float ry = Input.GetAxis("Right_Vertical");
+
+        float angle = Mathf.Atan2(ry, rx) * Mathf.Rad2Deg;
+
+        Vector3 shotDirection = new Vector3(rx, ry, 0);
+
+        currentGun.transform.localRotation = Quaternion.Euler(0,0,angle);
+
+        if(Input.GetAxis("Right_Trigger") == 1)
+        {
+            GameObject bullet = (GameObject)Instantiate(bulletColor[bulletC], currentGun.transform.position, Quaternion.identity);
+            bullet.GetComponent<Rigidbody2D>().velocity = shotDirection * bulletVelocity;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D pickUps)
@@ -141,10 +177,14 @@ public class Player1Controller : MonoBehaviour
 		if (pickUps.tag == "GreenPickUp") {
 			bulletC = 0;
 			Destroy (pickUps.gameObject);
-		} else if (pickUps.tag == "RedPickUp") {
+            currentGun = Instantiate(currentGunArray[0], new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            currentGun.transform.parent = transform;
+        } else if (pickUps.tag == "RedPickUp") {
 			bulletC = 1;
 			Destroy (pickUps.gameObject);
-		}
+            currentGun = Instantiate(currentGunArray[1], new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            currentGun.transform.parent = transform;
+        }
 
         if (pickUps.tag == "RedGhost" || pickUps.tag == "GreenGhost")
         {
