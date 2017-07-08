@@ -15,6 +15,8 @@ public class Player2Controller : MonoBehaviour
 
     public GameObject[] pickUpColor;
 
+    public GameObject[] currentGunArray;
+
     public float bulletVelocity;
 
     private Vector3 target;
@@ -29,6 +31,8 @@ public class Player2Controller : MonoBehaviour
 
     float nextFire;
 
+    private GameObject currentGun;
+
     void Start()
     {
 
@@ -37,6 +41,9 @@ public class Player2Controller : MonoBehaviour
         animator = GetComponent<Animator>();
 
 		bulletC = 0;
+
+        currentGun = Instantiate(currentGunArray[0], new Vector3 (transform.position.x + 0.4f, transform.position.y, transform.position.z), Quaternion.identity);
+        currentGun.transform.parent = transform;
     }
 
     void FixedUpdate()
@@ -54,8 +61,6 @@ public class Player2Controller : MonoBehaviour
                 animator.Play("Player1Up");
             else if (Input.GetAxis("Vertical2") < 0)
                 animator.Play("Player1Down");
-        
-
     }
 
     void Update()
@@ -147,10 +152,16 @@ public class Player2Controller : MonoBehaviour
 
 		if (pickUps.tag == "YellowPickUp") {
 			bulletC = 0;
-			Destroy (pickUps.gameObject);
+            Destroy(currentGun);
+            currentGun = Instantiate(currentGunArray[0], new Vector3(transform.position.x + 0.4f, transform.position.y, transform.position.z), Quaternion.identity);
+            currentGun.transform.parent = transform;
+            Destroy (pickUps.gameObject);
 		} else if (pickUps.tag == "BluePickUp") {
 			bulletC = 1;
-			Destroy (pickUps.gameObject);
+            Destroy(currentGun);
+            currentGun = Instantiate(currentGunArray[1], new Vector3(transform.position.x + 0.4f, transform.position.y, transform.position.z), Quaternion.identity);
+            currentGun.transform.parent = transform;
+            Destroy (pickUps.gameObject);
 		}
 
         if(pickUps.tag == "BlueGhost" || pickUps.tag == "YellowGhost")
@@ -174,50 +185,4 @@ public class Player2Controller : MonoBehaviour
             pickUpBool = false;
         }
     }
-
-    //void StopBullet()
-    //{
-
-    //    directionVector = (target - transform.position).normalized;
-
-    //    for (int i = 0; i < pickUps.Count; i++)
-    //    {
-    //        GameObject goBullet = pickUps[i];
-
-    //        if (goBullet != null)
-    //        {
-    //                if (goBullet.transform.position.x < target.x)
-    //                {
-    //                    goBullet.transform.Translate(directionVector * bulletVelocity * Time.deltaTime);
-    //            }
-    //        }
-    //    }
-    //}
-
-    //void ShootNormalBullet()
-    //{
-    //    directionVector = (target - transform.position).normalized;
-
-    //    for (int i = 0; i < bullets.Count; i++)
-    //    {
-    //        GameObject goBullet = bullets[i];
-
-    //        if (goBullet != null)
-    //        {
-
-    //            goBullet.transform.Translate(directionVector * bulletVelocity * Time.deltaTime);
-
-    //        }
-
-    //        Vector2 bulletPosition = Camera.main.WorldToScreenPoint(goBullet.transform.position);
-
-    //        if (bulletPosition.y >= Screen.height || bulletPosition.y < 0 || bulletPosition.x >= Screen.width || bulletPosition.x < 0)
-    //        {
-    //            DestroyObject(goBullet);
-    //            bullets.Remove(goBullet);
-    //        }
-    //    }
-
-
-    //}
 }

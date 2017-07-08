@@ -73,17 +73,17 @@ public class Player1Controller : MonoBehaviour
 
     void Update()
     {
-        float moveX = Input.GetAxis("AimX");
-        float moveY = Input.GetAxis("AimY");
+        float moveX = Input.GetAxis("Horizontal1");
+        float moveY = Input.GetAxis("Vertical1");
         Vector2 direction = new Vector2(moveX, moveY);
 
-        if (Input.GetButtonDown("pickUp") && pickUpBool == true)
+        if (Input.GetKeyDown(KeyCode.Space) && pickUpBool == true)
         {
 			pickUp = (GameObject)Instantiate(pickUpColor[pickUpC], transform.position, Quaternion.identity);
             pickUp.transform.parent = transform;
         }
 
-        if (Input.GetButtonDown("Throw"))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             //target = AimVec;
             //target.z = 0;
